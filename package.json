@@ -1,0 +1,14 @@
+{
+  "name": "deepcipher",
+  "version": "1.0.0",
+  "description": "cryptosystem",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Andrii Kushka",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
