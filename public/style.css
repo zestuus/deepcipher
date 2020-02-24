@@ -1,0 +1,14 @@
+.header {
+	display: table;
+	height: 200px;
+	overflow: hidden;
+}
+.logo {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+.menu .btn{
+	width:100%;
+	margin:5px;
+}
