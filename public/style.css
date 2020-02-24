@@ -8,7 +8,11 @@
 	vertical-align: middle;
 	text-align: center;
 }
-.menu .btn{
+.menu .btn {
 	width:100%;
 	margin:5px;
+}
+textarea {
+	height: 193px;
+	resize: none;
 }
