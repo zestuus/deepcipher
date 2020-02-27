@@ -9,7 +9,7 @@
 	text-align: center;
 }
 .logo a {
-	text-decoration:none;
+	text-decoration: none;
 	color: #343a40;
 }
 .menu .btn {
@@ -19,4 +19,17 @@
 textarea {
 	height: 193px;
 	resize: none;
+}
+#shift-group {
+	margin:5px;
+	text-align:center;
+}
+#shift {
+	width:80px;
+	border: 1px solid #343a40;
+	border-radius: 3px;
+	padding: 3px;
+}
+.cipher-title {
+	margin-bottom: 20px;
 }

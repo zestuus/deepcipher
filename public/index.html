@@ -20,8 +20,21 @@
 		<div class="row">
 			<div class="col-3 menu">
 				<a href="/info" class="btn btn-outline-dark">Info <i class="fas fa-info"></i></a>
-				<button class="btn btn-outline-dark">Encrypt file</button>
-				<button class="btn btn-outline-dark">Decrypt file</button>	
+				<hr>
+				<div id="shift-group">
+					<h5 class="cipher-title">Caesar cipher</h5>
+					<label for="shift">Shift: </label>
+					<input type="number" id="shift" value="0">
+				</div>
+				<button class="btn btn-outline-dark" 
+				onclick="Caesar.encrypt($('#content')[0], Number($('#shift')[0].value))">
+					Encrypt file
+				</button>
+				<button class="btn btn-outline-dark" 
+				onclick="Caesar.decrypt($('#content')[0], Number($('#shift')[0].value))">
+					Decrypt file
+				</button>
+				<hr>
 			</div>
 			<div class="col-9">
 				<form id="upload" action="/upload" method="post" enctype="multipart/form-data">
@@ -33,13 +46,13 @@
 				<form action="/save" method="post">
 					<div class="form-group">
 						<label for="filename">Filename: </label>
-						<input type="text" pattern="^[a-zA-Z]+.txt$" title="File mush have extention .txt" class="form-control" name="filename" id="filename" placeholder="filename.txt">
+						<input type="text" class="form-control" name="filename" id="filename" placeholder="filename.txt">
 					</div>
 					<div class="form-group">
-						<label for="text">Text: </label><br>
-						<textarea type="text" class="form-control" name="text" id="text" placeholder="Input text here:" rows="8"></textarea>
+						<label for="content">Content: </label><br>
+						<textarea type="content" class="form-control" name="content" id="content" placeholder="Input text here:" rows="8"></textarea>
 					</div>
-					<button type="submit" class="btn btn-outline-dark">Save file</button>
+					<button type="submit" class="btn btn-outline-dark">Download file</button>
 				</form>
 			</div>
 		</div>
