@@ -1,8 +1,20 @@
 const ukrainian_alphabet = [' ', 'а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'и', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь', 'ю', 'я']
-const english_alphabet = [' ', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+const english_alphabet = [' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 // console.log(ukrainian_alphabet.length) === 34
 // console.log(english_alphabet.length) === 27
+
+function getType(char) {
+  let charCode = char.charCodeAt();
+  if(97<=charCode && charCode<=122)
+    return 'en';
+  if(char === ' ' || char === '\n')
+    return ' ';
+  if(ukrainian_alphabet.indexOf(char) !==-1)
+    return 'uk';
+  //else
+  return 'symbol'
+}
 
 class Cipher {
   static encrypt(input, shift) { throw Error('Abstract method!')}
@@ -11,8 +23,11 @@ class Cipher {
 
 class Caesar extends Cipher{
   static encryptEnCharacter(char, shift) {
-    let index = ukrainian_alphabet.indexOf(char);
-    return english_alphabet[(index + shift)%27]
+    let index = english_alphabet.indexOf(char);
+    const shiftedIndex = index + shift;
+    const encryptedIndex = shiftedIndex > 0 ?(shiftedIndex)%27: (shiftedIndex+27)%27;
+
+    return english_alphabet[encryptedIndex]
   }
   static encryptUkCharacter(char, shift) {
     const index = ukrainian_alphabet.indexOf(char);
@@ -21,24 +36,12 @@ class Caesar extends Cipher{
 
     return ukrainian_alphabet[encryptedIndex];
   }
-  static getType(char) {
-    let charCode = char.charCodeAt();
-    if(97<=charCode && charCode<=122)
-      return 'en';
-    if(char === ' ' || char === '\n')
-      return ' ';
-    if(ukrainian_alphabet.indexOf(char) !==-1)
-      return 'uk';
-    //else
-    return 'symbol'
-  }
   static encrypt(input, shift) { 
-    console.log('Encryption has been started');
     let text = input.value.toLowerCase();
     let encoded = '';
     let lang = '';
     for (let char of text) {
-      const type = Caesar.getType(char);
+      const type = getType(char);
       if(type==='en') {
         lang = 'en';
         encoded+= Caesar.encryptEnCharacter(char, shift);
@@ -49,7 +52,7 @@ class Caesar extends Cipher{
       }
       else if(type===' ') {
         if(char === '\n')
-          char = ' '
+          char = ' ';
         if(lang === 'en')
           encoded+= Caesar.encryptEnCharacter(char, shift);
         else
