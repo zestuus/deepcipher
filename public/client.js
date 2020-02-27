@@ -8,10 +8,12 @@ function getType(char) {
   let charCode = char.charCodeAt();
   if(97<=charCode && charCode<=122)
     return 'en';
-  if(char === ' ' || char === '\n')
+  if(char === ' ')
     return ' ';
   if(ukrainian_alphabet.indexOf(char) !==-1)
     return 'uk';
+  if(char === '\n')
+    return '\n';
   //else
   return 'symbol'
 }
@@ -36,27 +38,34 @@ class Caesar extends Cipher{
 
     return ukrainian_alphabet[encryptedIndex];
   }
+  static isValidKey(shift) {
+    return shift === parseInt(shift, 10)
+  }
+
   static encrypt(input, shift) { 
+    if (Caesar.isValidKey(shift))
+      throw Error('key is not valid!')
     let text = input.value.toLowerCase();
     let encoded = '';
     let lang = '';
     for (let char of text) {
       const type = getType(char);
-      if(type==='en') {
+      if(type === 'en') {
         lang = 'en';
-        encoded+= Caesar.encryptEnCharacter(char, shift);
+        encoded += Caesar.encryptEnCharacter(char, shift);
       }
-      else if(type==='uk') {
+      else if(type === 'uk') {
         lang = 'uk';
-        encoded+= Caesar.encryptUkCharacter(char, shift);
+        encoded += Caesar.encryptUkCharacter(char, shift);
       }
-      else if(type===' ') {
-        if(char === '\n')
-          char = ' ';
+      else if(type === ' ') {
         if(lang === 'en')
-          encoded+= Caesar.encryptEnCharacter(char, shift);
+          encoded += Caesar.encryptEnCharacter(char, shift);
         else
-          encoded+= Caesar.encryptUkCharacter(char, shift);
+          encoded += Caesar.encryptUkCharacter(char, shift);
+      }
+      else if(type=== "\n") {
+        encoded += "\n"
       }
     }
     input.value = encoded;
@@ -69,9 +78,24 @@ class Caesar extends Cipher{
 document.getElementById("file").onchange = function() {
     const file = $('#file')[0].files[0];
     const reader = new FileReader();
+    const isDoc = file.name.indexOf(".doc") !==-1
+
     reader.onload = function(){
-    	document.getElementById("filename").value = file.name;
-    	document.getElementById("content").innerHTML = this.result;
+      $("#filename")[0].value = file.name;
+      if (isDoc) {
+        let arrayBuffer = this.result;
+        mammoth.extractRawText({arrayBuffer: arrayBuffer}).then(function (resultObject) {
+          $("#content")[0].value = resultObject.value
+        })
+
+      }
+      else {
+      	$("#content")[0].value = this.result;
+      }
+
     }
-    reader.readAsText(file);
+    if (isDoc) 
+      reader.readAsArrayBuffer(file);
+    else
+      reader.readAsText(file);
 }
