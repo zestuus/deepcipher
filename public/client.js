@@ -110,3 +110,7 @@ document.getElementById("file").onchange = function() {
     else
       reader.readAsText(file);
 }
+
+document.getElementById("caesar-toggle").onclick = function () {
+  $('#caesar')[0].hidden = !$('#caesar')[0].hidden;
+} 

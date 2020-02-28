@@ -3,6 +3,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const docx = require('docx');
 
 app.listen(port,()=>console.log(`listening on port ${port}...`));
 
@@ -14,15 +15,37 @@ app.post('/save', (req, res)=> {
   const content = req.body.content;
   const name = req.body.filename;
 
-  const hasExtention = name.indexOf(".txt") === -1;
-  const filename = hasExtention ? name + ".txt" : name;
+  const isDoc = name.indexOf(".doc")!==-1;
+  const isTxt = name.indexOf(".txt") !== -1;
+  let filename;
+  if (isDoc || isTxt) {
+    filename = name
+  } else {
+    filename = name + ".txt";
+  }
   const filePath = __dirname + "/to_be_sent/"+ filename
-
-	fs.writeFile(filePath, content,()=>{
-    console.log('file is created');
-    res.download(filePath, () => 
-      fs.unlink(filePath, () => 
-        console.log("file is downloaded and removed")
-    ));
-  });
+  
+  if(isDoc) {
+    const doc = new docx.Document();
+    doc.addSection({
+      children: [new docx.Paragraph({text:content})]
+    })
+    docx.Packer.toBuffer(doc)
+      .then((buffer) => {
+        fs.writeFile(filePath,buffer,()=> {
+          res.download(filePath, () =>
+            fs.unlink(filePath, ()=>
+              console.log('file is delivered!'))
+          );
+        })
+      });
+   
+  } else {
+  	fs.writeFile(filePath, content,()=>{
+      res.download(filePath, () => {
+        fs.unlink(filePath, ()=>console.log('file is delivered!'));
+      });
+    });
+  }
 });
+
