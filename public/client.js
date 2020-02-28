@@ -43,8 +43,8 @@ class Caesar extends Cipher{
   }
 
   static encrypt(input, shift) { 
-    if (Caesar.isValidKey(shift))
-      throw Error('key is not valid!')
+    if (!Caesar.isValidKey(shift))
+      throw Error('Key is not valid!')
     let text = input.value.toLowerCase();
     let encoded = '';
     let lang = '';
@@ -68,10 +68,21 @@ class Caesar extends Cipher{
         encoded += "\n"
       }
     }
-    input.value = encoded;
+    return encoded;
   }
   static decrypt(input, shift) { 
-    Caesar.encrypt(input,-shift)
+    return Caesar.encrypt(input,-shift)
+  }
+  static bruteForce(input,key) {
+    input.value = input.value.toLowerCase();
+    let shift = 0;
+    while(input.value.indexOf(key)===-1) {
+      if (shift > 35)
+        throw Error("Key is not valid");
+      shift++;
+      input.value = Caesar.decrypt(input,1);
+    }
+    window.alert(`The system has been hacked! Secret shift is ${shift}`);
   }
 }
 

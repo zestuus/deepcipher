@@ -24,15 +24,23 @@
 				<div id="shift-group">
 					<h5 class="cipher-title">Caesar cipher</h5>
 					<label for="shift">Shift: </label>
-					<input type="number" id="shift" value="0">
+					<input type="number" id="shift" class="text-input" value="0">
 				</div>
 				<button class="btn btn-outline-dark" 
-				onclick="Caesar.encrypt($('#content')[0], Number($('#shift')[0].value))">
+				onclick="$('#content')[0].value = Caesar.encrypt($('#content')[0], Number($('#shift')[0].value))">
 					Encrypt file
 				</button>
 				<button class="btn btn-outline-dark" 
-				onclick="Caesar.decrypt($('#content')[0], Number($('#shift')[0].value))">
+				onclick="$('#content')[0].value = Caesar.decrypt($('#content')[0], Number($('#shift')[0].value))">
 					Decrypt file
+				</button>
+				<div id="shift-group">
+					<label for="key">Key: </label>
+					<input type="text" name="key" id="key" class="text-input">
+				</div>
+				<button class="btn btn-outline-dark" 
+				onclick="Caesar.bruteForce($('#content')[0], $('#key')[0].value)">
+					Brute force
 				</button>
 				<hr>
 			</div>

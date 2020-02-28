@@ -24,12 +24,17 @@ textarea {
 	margin:5px;
 	text-align:center;
 }
-#shift {
-	width:80px;
+.text-input{
 	border: 1px solid #343a40;
 	border-radius: 3px;
 	padding: 3px;
 }
+#shift {
+	width:80px;
+}
 .cipher-title {
 	margin-bottom: 20px;
+}
+#key{
+	width:150px;
 }
