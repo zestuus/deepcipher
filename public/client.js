@@ -45,7 +45,7 @@ class Caesar extends Cipher{
   static encrypt(input, shift) { 
     if (!Caesar.isValidKey(shift))
       throw Error('Key is not valid!')
-    let text = input.value.toLowerCase();
+    let text = input.value;
     let encoded = '';
     let lang = '';
     for (let char of text) {
@@ -66,6 +66,9 @@ class Caesar extends Cipher{
       }
       else if(type=== "\n") {
         encoded += "\n"
+      }
+      else {
+        encoded += char;
       }
     }
     return encoded;
