@@ -27,14 +27,14 @@ class Caesar extends Cipher{
   static encryptEnCharacter(char, shift) {
     let index = english_alphabet.indexOf(char);
     const shiftedIndex = index + shift;
-    const encryptedIndex = shiftedIndex > 0 ?(shiftedIndex)%27: (shiftedIndex+27)%27;
+    const encryptedIndex = shiftedIndex > 0 ?(shiftedIndex)%27: (shiftedIndex-27*shift)%27;
 
     return english_alphabet[encryptedIndex]
   }
   static encryptUkCharacter(char, shift) {
     const index = ukrainian_alphabet.indexOf(char);
     const shiftedIndex = index + shift;
-    const encryptedIndex = shiftedIndex > 0 ?(shiftedIndex)%34: (shiftedIndex+34)%34;
+    const encryptedIndex = shiftedIndex > 0 ?(shiftedIndex)%34: (shiftedIndex-34*shift)%34;
 
     return ukrainian_alphabet[encryptedIndex];
   }
@@ -77,7 +77,7 @@ class Caesar extends Cipher{
     return Caesar.encrypt(input,-shift)
   }
   static bruteForce(input,key) {
-    input.value = input.value.toLowerCase();
+    input.value = input.value;
     let shift = 0;
     while(input.value.indexOf(key)===-1) {
       if (shift > 35)
