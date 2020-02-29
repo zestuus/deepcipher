@@ -23,21 +23,21 @@
 				<hr>
 
 				<div class="shift-group" id="caesar-toggle">
-					<a href="#caesar" id="caesar-anchor">
+					<a href="#" class="anchor">
 						<h5 class="cipher-title">Caesar cipher</h5>
 					</a>
 				</div>
-				<div id="caesar" hidden>
+				<div id="caesar" class="cipher-menu" hidden>
 					<div class="shift-group">
 						<label for="shift">Shift: </label>
 						<input type="number" id="shift" class="text-input" value="0">
 					</div>
 					<button class="btn btn-outline-dark" 
-					onclick="$('#content')[0].value = Caesar.encrypt($('#content')[0], Number($('#shift')[0].value))">
+					onclick="doCaesarJob(Caesar.encrypt)">
 						Encrypt file
 					</button>
 					<button class="btn btn-outline-dark" 
-					onclick="$('#content')[0].value = Caesar.decrypt($('#content')[0], Number($('#shift')[0].value))">
+					onclick="doCaesarJob(Caesar.decrypt)">
 						Decrypt file
 					</button>
 					<div class="shift-group">
@@ -45,9 +45,43 @@
 						<input type="text" name="key" id="key" class="text-input">
 					</div>
 					<button class="btn btn-outline-dark" 
-					onclick="Caesar.bruteForce($('#content')[0], $('#key')[0].value)">
-						Brute force
+					onclick="Caesar.atack($('#content')[0], $('#key')[0].value)">
+						Atack
 					</button>
+				</div>
+				<hr>
+				<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+				<div class="shift-group" id="trithemius-toggle">
+					<a href="#" class="anchor">
+						<h5 class="cipher-title">Trithemius cipher</h5>
+					</a>
+				</div>
+				<div id="trithemius" class="cipher-menu" hidden>
+					<div class="shift-group">
+						<label for="a">A: </label>
+						<input type="number" id="a" class="text-input koefs" value="0">
+						<label for="b">B: </label>
+						<input type="number" id="b" class="text-input koefs" value="0">
+						<br>
+						<label for="c">C: </label>
+						<input type="number" id="c" class="text-input koefs">
+					</div>
+					<button class="btn btn-outline-dark" 
+					onclick="doTrithemiusJob(Trithemius.encrypt)">
+						Encrypt file
+					</button>
+					<button class="btn btn-outline-dark" 
+					onclick="doTrithemiusJob(Trithemius.decrypt)">
+						Decrypt file
+					</button>
+					<!-- <div class="shift-group">
+						<label for="key">Key: </label>
+						<input type="text" name="key" id="key" class="text-input">
+					</div>
+					<button class="btn btn-outline-dark" 
+					onclick="Trithemius.atack($('#content')[0], $('#key')[0].value)">
+						Atack
+					</button> -->
 				</div>
 				<hr>
 			</div>

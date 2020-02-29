@@ -38,12 +38,12 @@ class Caesar extends Cipher{
 
     return ukrainian_alphabet[encryptedIndex];
   }
-  static isValidKey(shift) {
-    return shift === parseInt(shift, 10)
+  static isValidKey(key) {
+    return key === parseInt(key, 10)
   }
 
-  static encrypt(input, shift) { 
-    if (!Caesar.isValidKey(shift))
+  static encrypt(input, key) { 
+    if (!Caesar.isValidKey(key))
       throw Error('Key is not valid!')
     let text = input.value;
     let encoded = '';
@@ -52,17 +52,17 @@ class Caesar extends Cipher{
       const type = getType(char);
       if(type === 'en') {
         lang = 'en';
-        encoded += Caesar.encryptEnCharacter(char, shift);
+        encoded += Caesar.encryptEnCharacter(char, key);
       }
       else if(type === 'uk') {
         lang = 'uk';
-        encoded += Caesar.encryptUkCharacter(char, shift);
+        encoded += Caesar.encryptUkCharacter(char, key);
       }
       else if(type === ' ') {
         if(lang === 'en')
-          encoded += Caesar.encryptEnCharacter(char, shift);
+          encoded += Caesar.encryptEnCharacter(char, key);
         else
-          encoded += Caesar.encryptUkCharacter(char, shift);
+          encoded += Caesar.encryptUkCharacter(char, key);
       }
       else if(type=== "\n") {
         encoded += "\n"
@@ -73,19 +73,67 @@ class Caesar extends Cipher{
     }
     return encoded;
   }
-  static decrypt(input, shift) { 
-    return Caesar.encrypt(input,-shift)
+  static decrypt(input, key) { 
+    return Caesar.encrypt(input,-key)
   }
-  static bruteForce(input,key) {
-    input.value = input.value;
+  static attack(encoded, decoded) {
+    encoded.value = encoded.value;
     let shift = 0;
-    while(input.value.indexOf(key)===-1) {
+    while(encoded.value.indexOf(decoded)===-1) {
       if (shift > 35)
-        throw Error("Key is not valid");
+        throw Error('Key is not valid');
       shift++;
-      input.value = Caesar.decrypt(input,1);
+      encoded.value = Caesar.decrypt(encoded,1);
     }
     window.alert(`The system has been hacked! Secret shift is ${shift}`);
+  }
+}
+
+class Trithemius extends Caesar {
+  static calulateShift(pos, key) {
+    if(key.length === 2)
+      return (key[0]*pos + key[1])*(key.decryption?-1:1);
+    else
+      return (key[0]*key[0]+ key[1]*pos + key[2])*(key.decryption?-1:1);
+  }
+  static isValidKey(key) {
+    return key instanceof Array && key.length >= 2 && key.length <= 3;
+  }
+  static encrypt(input, key) { 
+    if(!Trithemius.isValidKey(key))
+      throw Error('Key is not valid');
+    let text = input.value;
+    let encoded = '';
+    let lang = '';
+    for (let [pos, char] of text.split("").entries()) {
+      const type = getType(char);
+      const shift = Trithemius.calulateShift(pos, key)
+      if(type === 'en') {
+        lang = 'en';
+        encoded += Trithemius.encryptEnCharacter(char, shift);
+      }
+      else if(type === 'uk') {
+        lang = 'uk';
+        encoded += Trithemius.encryptUkCharacter(char, shift);
+      }
+      else if(type === ' ') {
+        if(lang === 'en')
+          encoded += Trithemius.encryptEnCharacter(char, shift);
+        else
+          encoded += Trithemius.encryptUkCharacter(char, shift);
+      }
+      else if(type=== "\n") {
+        encoded += "\n"
+      }
+      else {
+        encoded += char;
+      }
+    }
+    return encoded;
+  }
+  static decrypt(input, key) {
+    key.decryption = true;
+    return Trithemius.encrypt(input,key)
   }
 }
 
@@ -115,5 +163,30 @@ document.getElementById("file").onchange = function() {
 }
 
 document.getElementById("caesar-toggle").onclick = function () {
-  $('#caesar')[0].hidden = !$('#caesar')[0].hidden;
+  const hidden = $('#caesar')[0].hidden;
+  for (let cipher of $(".cipher-menu"))
+    cipher.hidden = true;
+  $('#caesar')[0].hidden = !hidden;
 } 
+
+document.getElementById("trithemius-toggle").onclick = function () {
+  const hidden = $('#trithemius')[0].hidden;
+  for (let cipher of $(".cipher-menu"))
+    cipher.hidden = true;
+  $('#trithemius')[0].hidden = !hidden;
+} 
+
+function doCipherJob(job, key) {
+  $('#content')[0].value = job($('#content')[0], key)
+}
+
+function doCaesarJob(job) {
+  doCipherJob(job, Number($('#shift')[0].value));
+}
+
+function doTrithemiusJob(job) {
+  const key = [Number($('#a')[0].value), Number($('#b')[0].value)]
+  if($('#a')[0].value)
+    key.push(Number($('#c')[0].value))
+  doCipherJob(job, key);
+}

@@ -38,7 +38,10 @@ textarea {
 #key {
 	width:150px;
 }
-#caesar-anchor {
+.anchor {
 	text-decoration: none;
 	color: #343a40;
+}
+.koefs {
+	width:50px;
 }
