@@ -42,12 +42,12 @@ class Caesar extends Cipher{
     return key === parseInt(key, 10)
   }
 
-  static encrypt(input, key) { 
+  static encrypt(input, key, lang) { 
     if (!Caesar.isValidKey(key))
       throw Error('Key is not valid!')
     let text = input.value;
     let encoded = '';
-    let lang = '';
+    lang = lang?lang:'';
     for (let char of text) {
       const type = getType(char);
       if(type === 'en') {
@@ -73,17 +73,16 @@ class Caesar extends Cipher{
     }
     return encoded;
   }
-  static decrypt(input, key) { 
-    return Caesar.encrypt(input,-key)
+  static decrypt(input, key, lang) { 
+    return Caesar.encrypt(input,-key, lang)
   }
-  static attack(encoded, decoded) {
-    encoded.value = encoded.value;
+  static attack(encrypted, decrypted) {
     let shift = 0;
-    while(encoded.value.indexOf(decoded)===-1) {
+    while(encrypted.value.indexOf(decrypted)===-1) {
       if (shift > 35)
         throw Error('Key is not valid');
       shift++;
-      encoded.value = Caesar.decrypt(encoded,1);
+      encrypted.value = Caesar.decrypt(encrypted,1);
     }
     window.alert(`The system has been hacked! Secret shift is ${shift}`);
   }
@@ -99,12 +98,12 @@ class Trithemius extends Caesar {
   static isValidKey(key) {
     return key instanceof Array && key.length >= 2 && key.length <= 3;
   }
-  static encrypt(input, key) { 
+  static encrypt(input, key, lang) { 
     if(!Trithemius.isValidKey(key))
       throw Error('Key is not valid');
     let text = input.value;
     let encoded = '';
-    let lang = '';
+    lang = lang?lang:'';
     for (let [pos, char] of text.split("").entries()) {
       const type = getType(char);
       const shift = Trithemius.calulateShift(pos, key)
@@ -117,10 +116,10 @@ class Trithemius extends Caesar {
         encoded += Trithemius.encryptUkCharacter(char, shift);
       }
       else if(type === ' ') {
-        if(lang === 'en')
-          encoded += Trithemius.encryptEnCharacter(char, shift);
-        else
+        if(lang === 'uk')
           encoded += Trithemius.encryptUkCharacter(char, shift);
+        else
+          encoded += Trithemius.encryptEnCharacter(char, shift);
       }
       else if(type=== "\n") {
         encoded += "\n"
@@ -134,6 +133,68 @@ class Trithemius extends Caesar {
   static decrypt(input, key) {
     key.decryption = true;
     return Trithemius.encrypt(input,key)
+  }
+  static attack(encrypted, decrypted){
+    [encrypted, decrypted] = [encrypted.value, decrypted.value]
+    if(encrypted.length !== decrypted.length )
+      throw Error("Strings lengths differ!")
+    const shifts = [];
+    for (var i = 0; i < encrypted.length; i++) {
+      let shift = 0;
+      let tmp = encrypted[i];
+      let lang = getType(tmp)==='uk'?'uk':'en';
+      while(tmp!==decrypted[i]) {
+        if (shift > 35)
+          throw Error('Key is not valid');
+        shift++;
+        tmp = Caesar.decrypt({value:tmp},1,lang);
+        lang = getType(tmp)===' '?lang: (getType(tmp)==='uk'?'uk':'en')
+      }
+      shifts.push(shift);
+    }
+    window.alert(`The system has been hacked! Secret shifts is ${shifts}`);
+  }
+}
+
+class Vigenere extends Caesar {
+  static isValidKey(key) {
+    return typeof key === "string" && key.length > 0;
+  }
+  static encrypt(input, key, lang, decryption) {
+    console.log(key)
+    if (!Vigenere.isValidKey(key))
+      throw Error('Key is not valid!')
+    let text = input.value;
+    let encoded = '';
+    lang = lang?lang:'';
+    for (let [pos, char] of text.split("").entries()) {
+      const type = getType(char);
+      let keyPos = pos % key.length;
+      if(type === 'en') {
+        lang = 'en';
+        encoded += Vigenere.encryptEnCharacter(char, key[keyPos].charCodeAt()*(decryption?-1:1));
+      }
+      else if(type === 'uk') {
+        lang = 'uk';
+        encoded += Vigenere.encryptUkCharacter(char, key[keyPos].charCodeAt()*(decryption?-1:1));
+      }
+      else if(type === ' ') {
+        if(lang === 'uk')
+          encoded += Vigenere.encryptUkCharacter(char, key[keyPos].charCodeAt()*(decryption?-1:1));
+        else
+          encoded += Vigenere.encryptEnCharacter(char, key[keyPos].charCodeAt()*(decryption?-1:1));
+      }
+      else if(type=== "\n") {
+        encoded += "\n"
+      }
+      else {
+        encoded += char;
+      }
+    }
+    return encoded;
+  }
+  static decrypt(input, key, lang) {
+    return Vigenere.encrypt(input,key,lang, true);
   }
 }
 
@@ -176,6 +237,13 @@ document.getElementById("trithemius-toggle").onclick = function () {
   $('#trithemius')[0].hidden = !hidden;
 } 
 
+document.getElementById("vigenere-toggle").onclick = function () {
+  const hidden = $('#vigenere')[0].hidden;
+  for (let cipher of $(".cipher-menu"))
+    cipher.hidden = true;
+  $('#vigenere')[0].hidden = !hidden;
+} 
+
 function doCipherJob(job, key) {
   $('#content')[0].value = job($('#content')[0], key)
 }
@@ -189,4 +257,8 @@ function doTrithemiusJob(job) {
   if($('#a')[0].value)
     key.push(Number($('#c')[0].value))
   doCipherJob(job, key);
+}
+
+function doVigenereJob(job) {
+  doCipherJob(job, $('#keyword')[0].value);
 }

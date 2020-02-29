@@ -42,15 +42,14 @@
 					</button>
 					<div class="shift-group">
 						<label for="key">Key: </label>
-						<input type="text" name="key" id="key" class="text-input">
+						<input type="text" name="key" id="caesar-key" class="text-input key">
 					</div>
 					<button class="btn btn-outline-dark" 
-					onclick="Caesar.atack($('#content')[0], $('#key')[0].value)">
+					onclick="Caesar.attack($('#content')[0], $('#caesar-key')[0].value)">
 						Atack
 					</button>
 				</div>
 				<hr>
-				<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 				<div class="shift-group" id="trithemius-toggle">
 					<a href="#" class="anchor">
 						<h5 class="cipher-title">Trithemius cipher</h5>
@@ -74,14 +73,34 @@
 					onclick="doTrithemiusJob(Trithemius.decrypt)">
 						Decrypt file
 					</button>
-					<!-- <div class="shift-group">
-						<label for="key">Key: </label>
-						<input type="text" name="key" id="key" class="text-input">
+					<div class="shift-group">
+						<label for="key">Decrypted: </label>
+						<input type="text" name="key" id="trithemius-key" class="text-input key">
 					</div>
 					<button class="btn btn-outline-dark" 
-					onclick="Trithemius.atack($('#content')[0], $('#key')[0].value)">
+					onclick="Trithemius.attack($('#content')[0], $('#trithemius-key')[0])">
 						Atack
-					</button> -->
+					</button>
+				</div>
+				<hr>
+				<div class="shift-group" id="vigenere-toggle">
+					<a href="#" class="anchor">
+						<h5 class="cipher-title">Vigenere cipher</h5>
+					</a>
+				</div>
+				<div id="vigenere" class="cipher-menu" hidden>
+					<div class="shift-group">
+						<label for="keyword">Keyword: </label>
+						<input type="text" id="keyword" class="text-input key">
+					</div>
+					<button class="btn btn-outline-dark" 
+					onclick="doVigenereJob(Vigenere.encrypt)">
+						Encrypt file
+					</button>
+					<button class="btn btn-outline-dark" 
+					onclick="doVigenereJob(Vigenere.decrypt)">
+						Decrypt file
+					</button>
 				</div>
 				<hr>
 			</div>
