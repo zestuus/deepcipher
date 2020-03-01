@@ -156,12 +156,49 @@ class Trithemius extends Caesar {
   }
 }
 
+class XOR extends Cipher {
+  /////
+  static encryptCharacter(char, key) {
+    const charCode = char.charCodeAt();
+    return String.fromCharCode(charCode ^ key)
+  }
+  static isValidKey(key) {
+    return key === parseInt(key, 10)
+  }
+  static getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+  static generateKey(keyLen) {
+    const alphabet = ukrainian_alphabet.concat(english_alphabet.slice(1))
+    const alphaLen = alphabet.length;
+    let key = '';
+    for(let i = 0; i < keyLen; i++)
+      key+=alphabet[XOR.getRandomInt(alphaLen)]
+    return key;
+  }
+  static encrypt(input, keyLen, key) {
+    if (!XOR.isValidKey(keyLen))
+      throw Error('Key is not valid!')
+    let text = input.value;
+    key = key?key: XOR.generateKey(keyLen);
+    $("#xor-key")[0].value = key;
+    let encoded = '';
+    for (let [pos, char] of text.split("").entries()) {
+      let keyPos = pos % key.length;
+      encoded += XOR.encryptCharacter(char, key[keyPos].charCodeAt());
+    }
+    return encoded;
+  }
+  static decrypt(input, key) {
+    return XOR.encrypt(input, 0,key);
+  }
+}
+
 class Vigenere extends Caesar {
   static isValidKey(key) {
     return typeof key === "string" && key.length > 0;
   }
   static encrypt(input, key, lang, decryption) {
-    console.log(key)
     if (!Vigenere.isValidKey(key))
       throw Error('Key is not valid!')
     let text = input.value;
@@ -237,6 +274,13 @@ document.getElementById("trithemius-toggle").onclick = function () {
   $('#trithemius')[0].hidden = !hidden;
 } 
 
+document.getElementById("xor-toggle").onclick = function () {
+  const hidden = $('#xor')[0].hidden;
+  for (let cipher of $(".cipher-menu"))
+    cipher.hidden = true;
+  $('#xor')[0].hidden = !hidden;
+} 
+
 document.getElementById("vigenere-toggle").onclick = function () {
   const hidden = $('#vigenere')[0].hidden;
   for (let cipher of $(".cipher-menu"))
@@ -261,4 +305,8 @@ function doTrithemiusJob(job) {
 
 function doVigenereJob(job) {
   doCipherJob(job, $('#keyword')[0].value);
+}
+
+function doXORJob(job) {
+  doCipherJob(job, Number($('#len')[0].value));
 }

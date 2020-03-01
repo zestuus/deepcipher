@@ -83,6 +83,30 @@
 					</button>
 				</div>
 				<hr>
+				<div class="shift-group" id="xor-toggle">
+					<a href="#" class="anchor">
+						<h5 class="cipher-title">XOR cipher</h5>
+					</a>
+				</div>
+				<div id="xor" class="cipher-menu" hidden>
+					<div class="shift-group">
+						<label for="len">Key length: </label>
+						<input type="number" id="len" class="text-input" value="0">
+					</div>
+					<button class="btn btn-outline-dark" 
+					onclick="doXORJob(XOR.encrypt)">
+						Encrypt file
+					</button>
+					<div class="shift-group">
+						<label for="xor-key">Generated Key: </label>
+						<input type="text" id="xor-key" class="text-input">
+					</div>
+					<button class="btn btn-outline-dark" 
+					onclick="$('#content')[0].value = XOR.decrypt($('#content')[0], $('#xor-key')[0].value)">
+						Decrypt file
+					</button>
+				</div>
+				<hr>
 				<div class="shift-group" id="vigenere-toggle">
 					<a href="#" class="anchor">
 						<h5 class="cipher-title">Vigenere cipher</h5>

@@ -32,6 +32,9 @@ textarea {
 #shift {
 	width:80px;
 }
+#len {
+	width:80px;
+}
 .cipher-title {
 	margin-bottom: 20px;
 }
