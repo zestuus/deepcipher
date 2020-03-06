@@ -127,6 +127,84 @@
 					</button>
 				</div>
 				<hr>
+				<div class="shift-group" id="rsa-toggle">
+					<a href="#" class="anchor">
+						<h5 class="cipher-title">RSA cipher</h5>
+					</a>
+				</div>
+				<div id="rsa" class="cipher-menu" hidden>
+					<button class="btn btn-outline-dark" 
+					onclick="RSA.generateKeys($('#public')[0],$('#private')[0])">
+						Generate keys
+					</button>
+					<div class="shift-group">
+						<label for="keyword">Public key: </label>
+						<input type="text" id="public" class="text-input key">
+					</div>
+					<button class="btn btn-outline-dark" 
+					onclick="$('#content')[0].value = RSA.encrypt($('#content')[0], $('#public')[0].value)">
+						Encrypt file
+					</button>
+					<div class="shift-group">
+						<label for="keyword">Private key: </label>
+						<input type="text" id="private" class="text-input key">
+					</div>
+					<button class="btn btn-outline-dark" 
+					onclick="$('#content')[0].value = RSA.decrypt($('#content')[0], $('#private')[0].value)">
+						Decrypt file
+					</button>
+				</div>
+				<hr>
+				<div class="shift-group" id="kea-toggle">
+					<a href="#" class="anchor">
+						<h5 class="cipher-title">Key exchange protocol</h5>
+					</a>
+				</div>
+				<div id="kea" class="cipher-menu" hidden>
+					<button class="btn btn-outline-dark" 
+					onclick="KEA.generate()">
+						Generate key
+					</button>
+					<div class="shift-group">
+						<label for="keyword">p: </label>
+						<input type="text" id="p" class="text-input koefs">
+						<label for="keyword">q: </label>
+						<input type="text" id="q" class="text-input koefs">
+					</div>
+					<div class="shift-group">
+						<label for="keyword">a: </label>
+						<input type="text" id="a_secret" class="text-input koefs">
+						<label for="keyword">b: </label>
+						<input type="text" id="b_secret" class="text-input koefs">
+					</div>
+					<div class="shift-group">
+						<label for="keyword">A: </label>
+						<input type="text" id="a_public" class="text-input koefs">
+						<label for="keyword">B: </label>
+						<input type="text" id="b_public" class="text-input koefs">
+					</div>
+					<div class="shift-group">
+						<label for="keyword">B: </label>
+						<input type="text" id="b_got" class="text-input koefs">
+						<label for="keyword">A: </label>
+						<input type="text" id="a_got" class="text-input koefs">
+					</div>
+					<div class="shift-group">
+						<label for="keyword">s: </label>
+						<input type="text" id="s_left" class="text-input koefs">
+						<label for="keyword">s: </label>
+						<input type="text" id="s_right" class="text-input koefs">
+					</div>
+					<button class="btn btn-outline-dark" 
+					onclick="$('#content')[0].value = Caesar.encrypt($('#content')[0], Number($('#s_left')[0].value))">
+						Encrypt file
+					</button>
+					<button class="btn btn-outline-dark" 
+					onclick="$('#content')[0].value = Caesar.decrypt($('#content')[0], Number($('#s_right')[0].value))">
+						Decrypt file
+					</button>
+				</div>
+				<hr>
 			</div>
 			<div class="col-9">
 				<div class="form-group">
