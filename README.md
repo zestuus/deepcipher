@@ -7,4 +7,4 @@ Available ciphers:
 - XOR
 - Vigenere
 - RSA
-- Diffie–Hellman key exchange\
+- Diffie–Hellman key exchange
