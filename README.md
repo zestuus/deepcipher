@@ -7,6 +7,4 @@ Available ciphers:
 - XOR
 - Vigenere
 - RSA
-- Diffie–Hellman key exchange
-
-To try the project go to: https://deepcipher.herokuapp.com
+- Diffie–Hellman key exchange\
